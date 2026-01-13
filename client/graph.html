@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Progress Graph</title>
+    <style>
+        /* General Layout */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+            margin: 0;
+        }
+
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 600px;
+            border: 2px solid #7d5fff; /* Purple border from your screenshot */
+        }
+
+        /* Graph Container */
+        .graph-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            margin-bottom: 20px;
+            border-left: 2px solid #333;
+            border-bottom: 2px solid #333;
+        }
+
+        /* The SVG drawing area */
+        svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        /* Line Styles */
+        .line-planned {
+            fill: none;
+            stroke: #00897b; /* Teal */
+            stroke-width: 4;
+            stroke-linecap: round;
+        }
+
+        .line-actual {
+            fill: none;
+            stroke: #8bc34a; /* Light Green */
+            stroke-width: 4;
+            stroke-linecap: round;
+        }
+
+        /* Y-Axis Ticks */
+        .y-ticks {
+            position: absolute;
+            left: -10px;
+            top: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .tick {
+            width: 8px;
+            height: 1px;
+            background: #333;
+        }
+
+        /* X-Axis Labels */
+        .x-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            color: #333;
+            font-weight: 500;
+            padding: 0 10px; /* Offset to align with data points */
+        }
+
+        /* Legend Styling */
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            color: #444;
+        }
+
+        .box {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            margin-right: 8px;
+        }
+
+        .box.planned { background-color: #00897b; }
+        .box.actual { background-color: #8bc34a; }
+
+        .x-title {
+            text-align: center;
+            margin-top: 5px;
+            font-size: 14px;
+            color: #666;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="graph-container">
+            <div class="y-ticks">
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+                <div class="tick"></div>
+            </div>
+
+            <svg viewBox="0 0 600 300" preserveAspectRatio="none">
+                <polyline class="line-planned" points="
+                    0,270 
+                    600,0
+                "/>
+
+                <polyline class="line-actual" points="
+                    0,270 
+                    85,220
+                    171,180
+                    257,150
+                    342,130
+                    428,100
+                    514,60
+                    600,15
+                "/>
+            </svg>
+        </div>
+
+        <div class="x-labels">
+            <span>1</span>
+            <span>2</span>
+            <span>3</span>
+            <span>4</span>
+        </div>
+        <div class="x-title">Weeks</div>
+
+        <div class="legend">
+            <div class="legend-item">
+                <div class="box planned"></div>
+                <span>Planned</span>
+            </div>
+            <div class="legend-item">
+                <div class="box actual"></div>
+                <span>Actual</span>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

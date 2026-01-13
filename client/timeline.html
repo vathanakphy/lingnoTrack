@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Timeline with Duration</title>
+    <style>
+        :root {
+            /* Phase Colors */
+            --phase1: #3b82f6; /* Blue - Analysis */
+            --phase2: #8b5cf6; /* Purple - Design */
+            --phase3: #f97316; /* Orange - Core */
+            --phase4: #10b981; /* Teal - Final */
+
+            /* Status Colors */
+            --delay-color: #ef4444; /* Red */
+            --fast-color: #22c55e;  /* Green */
+
+            --text-color: #334155;
+            --grid-line: #e2e8f0;
+            --bg: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .chart-container {
+            background: var(--bg);
+            width: 100%;
+            max-width: 1400px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            min-height: 800px;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--text-color);
+            margin-bottom: 10px;
+            font-weight: 800;
+            font-size: 2rem;
+        }
+
+        /* Legend */
+        .legend-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+            gap: 10px;
+        }
+
+        .legend-row {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            margin-right: 6px;
+        }
+
+        /* Main Grid Layout */
+        .gantt-grid {
+            display: grid;
+            /* Columns: Task Name (250px) + 29 Days (1fr each) */
+            grid-template-columns: 250px repeat(29, 1fr);
+            grid-auto-rows: 55px;
+            gap: 0;
+            border: 1px solid var(--grid-line);
+            font-size: 0.85rem;
+            flex-grow: 1;
+        }
+
+        /* Grid Header (Dates) */
+        .header-row {
+            background-color: #fff;
+            font-weight: bold;
+            color: var(--text-color);
+            border-bottom: 2px solid #cbd5e1;
+            display: contents;
+        }
+
+        .header-cell {
+            padding: 15px 5px;
+            border-right: 1px solid var(--grid-line);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        .week-marker {
+            grid-column: span 7;
+            text-align: center;
+            border-right: 2px solid #cbd5e1;
+            font-weight: 700;
+        }
+
+        /* Task Rows */
+        .task-row {
+            display: contents;
+        }
+
+        .task-name {
+            grid-column: 1;
+            background: #fff;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            border-right: 2px solid #cbd5e1;
+            border-bottom: 1px solid var(--grid-line);
+            font-weight: 500;
+            color: var(--text-color);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            z-index: 2;
+        }
+
+        .timeline-cell {
+            grid-column: 2 / span 29;
+            background: transparent;
+            /* Grid Lines */
+            background-image: repeating-linear-gradient(to right, transparent 0 1px, transparent 1px 100%), 
+                              linear-gradient(to right, #f1f5f9 1px, transparent 1px);
+            background-size: calc(100% / 29) 100%; 
+            border-right: 1px dashed #f1f5f9;
+            border-bottom: 1px solid var(--grid-line);
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        /* BAR COMPONENT */
+        .bar-wrapper {
+            position: absolute;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: visible; /* Allow labels to pop out if needed */
+        }
+
+        .bar-wrapper:hover {
+            transform: scale(1.02);
+            z-index: 10;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        /* The Main Date Bar */
+        .main-bar {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+            border-radius: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        /* Delay Styles */
+        .has-delay .main-bar {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .delay-bar {
+            height: 100%;
+            background-color: var(--delay-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+
+        /* Fast Styles */
+        .has-fast .main-bar {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .fast-bar {
+            height: 100%;
+            background-color: var(--fast-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+
+        /* Label text next to bar */
+        .bar-label {
+            position: absolute;
+            left: 100%;
+            margin-left: 8px;
+            color: #64748b;
+            font-size: 0.75rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        /* Colors */
+        .p1 { background-color: var(--phase1); }
+        .p2 { background-color: var(--phase2); }
+        .p3 { background-color: var(--phase3); }
+        .p4 { background-color: var(--phase4); }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="chart-container">
+        <h1>Project Development Timeline</h1>
+
+        <div class="legend-wrapper">
+            <div class="legend-row">
+                <div class="legend-item"><div class="dot p1"></div> Phase 1: Analysis</div>
+                <div class="legend-item"><div class="dot p2"></div> Phase 2: UI/UX</div>
+                <div class="legend-item"><div class="dot p3"></div> Phase 3: Core UI</div>
+                <div class="legend-item"><div class="dot p4"></div> Phase 4: Final</div>
+            </div>
+            <div class="legend-row">
+                <div class="legend-item" style="color: var(--delay-color); font-weight:bold;">Performance: Red = Delay, Green = Fast (Saved)</div>
+            </div>
+        </div>
+
+        <div class="gantt-grid">
+            <div class="header-row">
+                <div class="header-cell" style="justify-content: flex-start; padding-left: 20px;">TASKS</div>
+                <div class="header-cell week-marker">Week 1 (Nov 10)</div>
+                <div class="header-cell week-marker">Week 2 (Nov 17)</div>
+                <div class="header-cell week-marker">Week 3 (Nov 24)</div>
+                <div class="header-cell week-marker">Week 4 (Dec 01)</div>
+                <div class="header-cell" style="grid-column: span 1;">End</div>
+            </div>
+
+            <div class="task-row">
+                <div class="task-name">Kick-off & Requirements</div>
+                <div class="timeline-cell">
+                    <div class="bar-wrapper" style="width: 10.3%; left: 0%;">
+                        <div class="main-bar p1" style="width: 100%">3 Days</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-row">
+                <div class="task-name">Risk & Tech Selection</div>
+                <div class="timeline-cell">
+                    <div class="bar-wrapper has-delay" style="width: 10.3%; left: 10.3%;">
+                        <div class="main-bar p1" style="width: 66%">2 Days</div>
+                        <div class="delay-bar" style="width: 34%">+1</div>
+                        <span class="bar-label" style="color:var(--delay-color)">+1 Day</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-row">
+                <div class="task-name">WBS & Schedule</div>
+                <div class="timeline-cell">
+                    <div class="bar-wrapper" style="width: 3.4%; left: 20.6%;">
+                        <div class="main-bar p1" style="width: 100%">1 Day</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-row">
+                <div class="task-name">Low-Fidelity Wireframes</div>
+                <div class="timeline-cell">
+                    <div class="bar-wrapper has-delay" style="width: 17.2%; left: 24.1%;">
+                        <div class="main-bar p2" style="width: 60%">3 Days</div>
+                        <div class="delay-bar" style="width: 40%">+2</div>
+                        <span class="bar-label" style="color:var(--delay-color)">+2 Days</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-row">
+                <div class="task-name">UI Lib, Login & Profile</div>
+                <div class="timeline-cell">
+                    <div class="bar-wrapper has-fast" style="width: 13.8%; left: 41.3%;">
+                        <div class="main-bar p2" style="width: 75%">3 Days</div>
+                        <div class="fast-bar" style="width: 25%">-1</div>
+                        <span class="bar-label" style="color:var(--fast-color)">Fast</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-row">
+                <div class="task-name">Core Dashboards (High-Fi)</div>
+                <div class="timeline-cell">
+                    <div class="bar-wrapper" style="width: 10.3%; left: 51.7%;">
+                        <div class="main-bar p3" style="width: 100%">3 Days</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-row">
+                <div class="task-name">Quiz & Web IDE UI (Part 1)</div>
+                <div class="timeline-cell">
+                    <div class="bar-wrapper has-delay" style="width: 17.2%; left: 62.0%;">
+                        <div class="main-bar p3" style="width: 60%">3 Days</div>
+                        <div class="delay-bar" style="width: 40%">+2</div>
+                        <span class="bar-label" style="color:var(--delay-color)">+2 Days</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-row">
+                <div class="task-name">Adv. UI: IDE 2, Token, Analytics</div>
+                <div class="timeline-cell">
+                    <div class="bar-wrapper has-fast" style="width: 13.8%; left: 79.3%;">
+                        <div class="main-bar p4" style="width: 75%">3 Days</div>
+                        <div class="fast-bar" style="width: 25%">-1</div>
+                        <span class="bar-label" style="color:var(--fast-color)">Fast</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-row">
+                <div class="task-name">AI Feedback & Interaction</div>
+                <div class="timeline-cell">
+                    <div class="bar-wrapper has-fast" style="width: 13.8%; left: 89.6%;">
+                        <div class="main-bar p4" style="width: 50%">2 Days</div>
+                        <div class="fast-bar" style="width: 50%">-2</div>
+                        <span class="bar-label" style="color:var(--fast-color)">Fast</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-row">
+                <div class="task-name">Final Presentation Prep</div>
+                <div class="timeline-cell">
+                     <div class="bar-wrapper has-fast" style="width: 6.9%; left: 96.5%;">
+                        <div class="main-bar p4" style="width: 50%">1 Day</div>
+                        <div class="fast-bar" style="width: 50%">-1</div>
+                        <span class="bar-label" style="left:110%; color:var(--fast-color)">Fast</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
