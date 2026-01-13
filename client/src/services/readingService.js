@@ -1,6 +1,5 @@
 // services/readingService.js
-export const API_BASE = "http://localhost:3000/reading";
-
+import { API_BASE } from "./api";
 export const fetchReadingArticles = async () => {
   const res = await fetch(`${API_BASE}/articles/today`);
   if (!res.ok) throw new Error("Failed to fetch articles");
@@ -27,7 +26,7 @@ export const submitReadingResult = async ({ articleId, answers }) => {
     throw new Error("articleId and answers are required");
   }
 
-  const res = await fetch(`http://localhost:3000/reading/submit`, {
+  const res = await fetch(`${API_BASE}/reading/submit`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

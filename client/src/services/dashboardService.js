@@ -1,3 +1,5 @@
+import { API_BASE } from "./api";
+
 export const getDashboardData = async () => {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -64,7 +66,7 @@ export const getDashboardData = async () => {
 };
 export const fetchDashboard = async () => {
   try {
-    const res = await fetch('http://localhost:3000/dashboard');
+    const res = await fetch(`${API_BASE}/dashboard`);
     if (!res.ok) throw new Error('Failed to fetch dashboard');
     return await res.json();
   } catch (err) {

@@ -1,5 +1,4 @@
-const API_BASE = "http://localhost:3000/writing"; // NestJS API
-
+import { API_BASE } from "./api";
 // Fetch all writing history
 export const fetchWritingHistory = async () => {
   const res = await fetch(`${API_BASE}/history`);

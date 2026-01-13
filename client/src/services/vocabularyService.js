@@ -1,4 +1,7 @@
 // services/vocabularyService.js
+import { API_BASE } from "./api";
+
+
 export const fetchWords = async (query = {}) => {
   const params = new URLSearchParams();
   if (query.word) params.append("word", query.word);
@@ -7,13 +10,13 @@ export const fetchWords = async (query = {}) => {
   if (query.page) params.append("page", query.page);
   if (query.limit) params.append("limit", query.limit);
 
-  const res = await fetch(`http://localhost:3000/vocabulary?${params.toString()}`);
+  const res = await fetch(`${API_BASE}/vocabulary?${params.toString()}`);
   if (!res.ok) throw new Error("Failed to fetch words");
   return res.json(); // { data, total, page, limit }
 };
 
 export const addWord = async (word) => {
-  const res = await fetch("http://localhost:3000/vocabulary", {
+  const res = await fetch(`${API_BASE}/vocabulary`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(word),
@@ -25,13 +28,13 @@ export const addWord = async (word) => {
   return res.json();
 };
 export const fetchCurrentWord = async () => {
-  const res = await fetch("http://localhost:3000/vocabulary/current");
+  const res = await fetch(`${API_BASE}/vocabulary/current`);
   if (!res.ok) throw new Error("Failed to fetch today's word");
   return res.json(); // returns array of words added today
 };
 
 export const fetchHintWord = async () => {
-  const res = await fetch("http://localhost:3000/vocabulary/hint");
+  const res = await fetch(`${API_BASE}/vocabulary/hint`);
   if (!res.ok) throw new Error("Failed to fetch hint word");
   return res.json();
 };
