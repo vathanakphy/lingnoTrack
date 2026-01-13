@@ -1,19 +1,19 @@
 // services/readingService.js
 import { API_BASE } from "./api";
 export const fetchReadingArticles = async () => {
-  const res = await fetch(`${API_BASE}/articles/today`);
+  const res = await fetch(`${API_BASE}/reading/articles/today`);
   if (!res.ok) throw new Error("Failed to fetch articles");
   return res.json();
 };
 
 export const fetchReadingArticle = async () => {
-  const res = await fetch(`${API_BASE}/article/today`);
+  const res = await fetch(`${API_BASE}/reading/article/today`);
   if (!res.ok) throw new Error("Failed to fetch article");
   return res.json();
 };
 
 export const fetchReadingExercises = async (articleId) => {
-  const res = await fetch(`${API_BASE}/articles/${articleId}/exercises`);
+  const res = await fetch(`${API_BASE}/reading/articles/${articleId}/exercises`);
   if (!res.ok) throw new Error("Failed to fetch exercises");
   return res.json();
 };
@@ -47,7 +47,7 @@ export const submitReadingResult = async ({ articleId, answers }) => {
 
 
 export const fetchReadingHistory = async () => {
-  const res = await fetch(`${API_BASE}/history`);
+  const res = await fetch(`${API_BASE}/reading/history`);
   if (!res.ok) throw new Error("Failed to fetch history");
   return res.json();
 };

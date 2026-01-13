@@ -1,14 +1,14 @@
 import { API_BASE } from "./api";
 // Fetch all writing history
 export const fetchWritingHistory = async () => {
-  const res = await fetch(`${API_BASE}/history`);
+  const res = await fetch(`${API_BASE}/writing/history`);
   if (!res.ok) throw new Error("Failed to fetch writing history");
   return res.json();
 };
 
 // Submit a new writing entry
 export const submitWriting = async (topic, text) => {
-  const res = await fetch(`${API_BASE}/submit`, {
+  const res = await fetch(`${API_BASE}/writing/submit`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ topic, text }),
@@ -24,7 +24,7 @@ export const submitWriting = async (topic, text) => {
 
 // Fetch available topics
 export const getTopic = async () => {
-  const res = await fetch(`${API_BASE}/topics`);
+  const res = await fetch(`${API_BASE}/writing/topics`);
   if (!res.ok) throw new Error("Failed to fetch topics");
   return res.json(); // returns array of topic strings
 };
