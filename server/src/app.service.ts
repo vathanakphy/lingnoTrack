@@ -42,8 +42,8 @@ export class AppService {
       dailyGoals: [
         {
           title: 'Vocabulary',
-          progress: Math.min(Math.round((vocabCountToday / 20) * 100), 100),
-          newItems: 20,
+          progress: Math.min(Math.round((vocabCountToday / 7) * 100), 100),
+          newItems: 7,
           completed: vocabCountToday,
           icon: 'style',
           color: 'blue',
@@ -66,7 +66,7 @@ export class AppService {
         },
       ],
       categoryProgress: [
-        { category: 'Vocabulary', progress: Math.min(Math.round((vocabCountToday / 20) * 100), 100) },
+        { category: 'Vocabulary', progress: Math.min(Math.round((vocabCountToday / 7) * 100), 100) },
         { category: 'Reading', progress: Math.min(Math.round((readingCountToday / 1) * 100), 100) },
         { category: 'Writing', progress: Math.min(Math.round((writingCountToday / 1) * 100), 100) },
       ],

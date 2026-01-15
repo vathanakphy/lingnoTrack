@@ -5,7 +5,7 @@ import VocabularyHint from "../components/vocabulary/VocabularyHint";
 import { VocabularyList } from "../components/vocabulary/VocabularyList";
 import { fetchCurrentWord, fetchWords } from "../services/vocabularyService";
 
-const DAILY_GOAL = 20;
+const DAILY_GOAL = 7;
 
 const VocabularyPage = () => {
   // --- State ---
