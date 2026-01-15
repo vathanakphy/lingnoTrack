@@ -4,7 +4,7 @@ import Dashboard from "./pages/Dashboard";
 import VocabularyPage from "./pages/VocabularyPage";
 import WritingLab from "./pages/WritingLab";
 import ReadingLab from "./pages/ReadingLab";
-
+import GrammarLab from "./pages/Grammar";
 const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:3000/writing";
 
 function App() {
@@ -54,6 +54,8 @@ function App() {
         <Route path="/vocabulary" element={<VocabularyPage />} />
         <Route path="/writing" element={<WritingLab />} />
         <Route path="/reading" element={<ReadingLab />} />
+        <Route path="/grammar" element={<GrammarLab />} />
+
       </Routes>
     </Router>
   );

@@ -20,6 +20,8 @@ const Sidebar = () => {
     { name: "Vocabulary", icon: <MdStyle />, path: "/vocabulary" },
     { name: "Reading", icon: <MdMenuBook />, path: "/reading" },
     { name: "Writing", icon: <MdEditNote />, path: "/writing" },
+    { name: "Grammar", icon: <MdHelp   />, path: "/grammar" },
+
   ];
 
   return (
