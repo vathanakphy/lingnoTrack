@@ -23,22 +23,26 @@ export class AiService {
      * Generate a writing topic with hint
      */
     async generateWritingTopic(): Promise<WritingTopicDto> {
-        const prompt = `
+const prompt = `
 Objective:
-Generate a simple writing topic for high school students. 
+Generate a simple writing topic for high school students.
 The topic can be any type: advantages/disadvantages, agree/disagree, opinion, or any simple essay idea.
 
 Instructions:
 - Provide one topic in JSON format ONLY:
 {
   "topic": "[Essay - Type] Example topic here",
-  "hint": "Example hint here"
+  "hint": "Short structure + key ideas to include (for brainstorming)"
 }
 - Replace "Type" with the essay style: Persuasive, Expository, Narrative, Opinion, or Descriptive.
 - Each topic must be **different from previous ones**.
 - Topics must be easy for high school students to write about.
 - Focus on education, environment, social issues, school life, or daily life.
 - Avoid adult, workplace, or technical topics.
+- The hint MUST:
+  - Briefly show the essay structure (e.g., introduction, body points, conclusion)
+  - Mention 2–3 key ideas students should include
+  - Be short and simple (not a full outline)
 - Do NOT include any text outside the JSON.
 - Return ONLY valid JSON.
 
@@ -49,6 +53,7 @@ Return only valid JSON.
 Tone:
 Encouraging and instructive.
 `;
+
 
 
         const response = await this.client.models.generateContent({
