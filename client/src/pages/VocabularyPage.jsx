@@ -20,7 +20,7 @@ const VocabularyPage = () => {
         // Fetch today's current word
         const current = await fetchCurrentWord();
         // Fetch today's full vocabulary list (limit to DAILY_GOAL)
-        const list = await fetchWords({ date: new Date().toISOString().split("T")[0], limit: DAILY_GOAL });
+        const list = await fetchWords({ date: new Date().toISOString().split("T")[0]});
 
         setCurrentWord(current); // array or object depending on your API
         setDailyWords(list?.data || []);
